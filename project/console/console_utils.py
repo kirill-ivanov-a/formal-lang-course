@@ -17,6 +17,10 @@ def print_graph_info(args: Namespace) -> None:
     ----------
     args: Namespace
         Parsed arguments.
+
+    Returns
+    -------
+    None
     """
     graph = graph_from_dataset(args.name, verbose=False)
     print(f"Information about graph `{args.name}`")
