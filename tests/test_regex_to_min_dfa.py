@@ -5,16 +5,18 @@ from pyformlang.regular_expression import Regex
 from project import regex_to_min_dfa
 
 
-def test_deterministic():
+@pytest.fixture
+def regex():
     pattern = "(a|$) (b a)* (b|$)"
-    re = Regex(pattern)
-
-    assert regex_to_min_dfa(re).is_deterministic()
+    return Regex(pattern)
 
 
-def test_equivalence():
-    pattern = "(a|$) (b a)* (b|$)"
-    min_dfa = regex_to_min_dfa(pattern)
+def test_deterministic(regex):
+    assert regex_to_min_dfa(regex).is_deterministic()
+
+
+def test_equivalence(regex):
+    min_dfa = regex_to_min_dfa(regex)
 
     dfa = DeterministicFiniteAutomaton()
 
@@ -39,9 +41,8 @@ def test_equivalence():
     assert min_dfa.is_equivalent_to(dfa)
 
 
-def test_minimal():
-    pattern = "(a|$) (b a)* (b|$)"
-    min_dfa = regex_to_min_dfa(pattern)
+def test_minimal(regex):
+    min_dfa = regex_to_min_dfa(regex)
     expected_num_states = 3
     actual_num_states = len(min_dfa.states)
 
