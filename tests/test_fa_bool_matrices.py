@@ -27,12 +27,6 @@ def fa():
     return fa
 
 
-@pytest.fixture
-def all_nodes_rpq():
-    res = set(product(range(4), range(4)))
-    return res.union({(0, 4), (4, 5), (5, 0)})
-
-
 def test_labels(fa):
     bm = FABooleanMatrices.from_automaton(fa)
     actual_labels = bm.bool_matrices.keys()
