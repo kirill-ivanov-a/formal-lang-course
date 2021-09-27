@@ -6,3 +6,9 @@ from project.graph_info import *
 
 import project.automaton_utils
 from project.automaton_utils import *
+
+import project.fa_bool_matrices
+from project.fa_bool_matrices import *
+
+import project.rpq
+from project.rpq import *
