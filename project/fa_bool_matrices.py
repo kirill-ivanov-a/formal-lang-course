@@ -40,7 +40,7 @@ class FABooleanMatrices:
         return self.final_states.copy()
 
     def get_transitive_closure(self):
-        tc = sum(bm for bm in self.bool_matrices.values())
+        tc = sum(self.bool_matrices.values())
         prev_nnz = tc.nnz
         new_nnz = 0
 
