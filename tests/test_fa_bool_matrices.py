@@ -1,5 +1,3 @@
-from itertools import product
-
 import pytest
 from pyformlang.finite_automaton import (
     NondeterministicFiniteAutomaton,
@@ -87,6 +85,6 @@ def test_intersection():
     expected_fa.add_start_state(State(0))
     expected_fa.add_final_state(State(1))
 
-    actual_fa = FABooleanMatrices.intersect(bm1, bm2).to_automaton()
+    actual_fa = bm1.intersect(bm2).to_automaton()
 
     assert actual_fa.is_equivalent_to(expected_fa)

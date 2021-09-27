@@ -3,7 +3,7 @@ from itertools import product
 import pytest
 from pyformlang.regular_expression import PythonRegex
 
-from project import generate_two_cycles_graph, make_rpq
+from project import generate_two_cycles_graph, rpq
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def all_nodes_rpq():
 
 def test_all_nodes_s_and_f(graph, all_nodes_rpq):
     # All nodes are start and final
-    actual_rpq = make_rpq(graph, PythonRegex("x*|y"))
+    actual_rpq = rpq(graph, PythonRegex("x*|y"))
 
     assert actual_rpq == all_nodes_rpq
 
@@ -36,6 +36,6 @@ def test_all_nodes_s_and_f(graph, all_nodes_rpq):
 )
 def test_querying(graph, pattern, start_nodes, final_nodes, expected_rpq):
     regex = PythonRegex(pattern)
-    actual_rpq = make_rpq(graph, regex, start_nodes, final_nodes)
+    actual_rpq = rpq(graph, regex, start_nodes, final_nodes)
 
     assert actual_rpq == expected_rpq

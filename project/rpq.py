@@ -4,7 +4,7 @@ from pyformlang.regular_expression import Regex
 from project import regex_to_min_dfa, graph_to_nfa, FABooleanMatrices
 
 
-def make_rpq(
+def rpq(
     graph: nx.MultiDiGraph,
     query: Regex,
     start_nodes: set = None,
@@ -16,9 +16,9 @@ def make_rpq(
     )
     query_bm = FABooleanMatrices.from_automaton(regex_to_min_dfa(query))
 
-    intersected_bm = FABooleanMatrices.intersect(graph_bm, query_bm)
-    start_states = intersected_bm.start_states
-    final_states = intersected_bm.final_states
+    intersected_bm = graph_bm.intersect(query_bm)
+    start_states = intersected_bm.get_start_states()
+    final_states = intersected_bm.get_final_states()
     tc = intersected_bm.get_transitive_closure()
     res = set()
 

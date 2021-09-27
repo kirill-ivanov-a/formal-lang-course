@@ -10,5 +10,5 @@ from project.automaton_utils import *
 import project.fa_bool_matrices
 from project.fa_bool_matrices import *
 
-import project.path_querying
-from project.path_querying import *
+import project.rpq
+from project.rpq import *

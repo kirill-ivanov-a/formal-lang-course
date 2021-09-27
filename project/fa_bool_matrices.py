@@ -30,6 +30,15 @@ class FABooleanMatrices:
 
         return automaton
 
+    def get_states(self):
+        return self.state_indices.keys()
+
+    def get_start_states(self):
+        return self.start_states.copy()
+
+    def get_final_states(self):
+        return self.final_states.copy()
+
     def get_transitive_closure(self):
         tc = sum(bm for bm in self.bool_matrices.values())
         prev_nnz = tc.nnz
@@ -41,6 +50,32 @@ class FABooleanMatrices:
 
         return tc
 
+    def intersect(self, other):
+        """Returns a new class object containing
+        the Kronecker products for given matrices
+        """
+        bm_res = FABooleanMatrices()
+        bm_res.num_states = self.num_states * other.num_states
+        common_labels = self.bool_matrices.keys() & other.bool_matrices.keys()
+
+        for label in common_labels:
+            bm_res.bool_matrices[label] = sparse.kron(
+                self.bool_matrices[label], other.bool_matrices[label], format="dok"
+            )
+
+        for s_fst, s_fst_idx in self.state_indices.items():
+            for s_snd, s_snd_idx in other.state_indices.items():
+                new_state = new_state_idx = s_fst_idx * other.num_states + s_snd_idx
+                bm_res.state_indices[new_state] = new_state_idx
+
+                if s_fst in self.start_states and s_snd in other.start_states:
+                    bm_res.start_states.add(new_state)
+
+                if s_fst in self.final_states and s_snd in other.final_states:
+                    bm_res.final_states.add(new_state)
+
+        return bm_res
+
     @classmethod
     def from_automaton(cls, automaton):
         bm = cls()
@@ -50,33 +85,6 @@ class FABooleanMatrices:
         bm.state_indices = {state: idx for idx, state in enumerate(automaton.states)}
         bm.bool_matrices = bm._create_bool_matrices(automaton)
         return bm
-
-    @staticmethod
-    def intersect(fst_bm, snd_bm):
-        """Returns a new class object containing
-        the Kronecker products for given matrices
-        """
-        bm_res = FABooleanMatrices()
-        bm_res.num_states = fst_bm.num_states * snd_bm.num_states
-        common_labels = fst_bm.bool_matrices.keys() & snd_bm.bool_matrices.keys()
-
-        for label in common_labels:
-            bm_res.bool_matrices[label] = sparse.kron(
-                fst_bm.bool_matrices[label], snd_bm.bool_matrices[label], format="dok"
-            )
-
-        for s_fst, s_fst_idx in fst_bm.state_indices.items():
-            for s_snd, s_snd_idx in snd_bm.state_indices.items():
-                new_state = new_state_idx = s_fst_idx * snd_bm.num_states + s_snd_idx
-                bm_res.state_indices[new_state] = new_state_idx
-
-                if s_fst in fst_bm.start_states and s_snd in snd_bm.start_states:
-                    bm_res.start_states.add(new_state)
-
-                if s_fst in fst_bm.final_states and s_snd in snd_bm.final_states:
-                    bm_res.final_states.add(new_state)
-
-        return bm_res
 
     def _create_bool_matrices(self, automaton):
         bool_matrices = {}
