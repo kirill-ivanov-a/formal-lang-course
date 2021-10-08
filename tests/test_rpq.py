@@ -1,3 +1,4 @@
+import sys
 from itertools import product
 
 import pytest
@@ -9,6 +10,9 @@ from project import (
     FABooleanMatricesDok,
     FABooleanMatricesCB,
 )
+
+if not sys.platform.startswith("linux"):
+    pytest.skip("skipping ubuntu-only tests", allow_module_level=True)
 
 
 @pytest.fixture(params=[FABooleanMatricesDok, FABooleanMatricesCB])

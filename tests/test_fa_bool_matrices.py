@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 from pyformlang.finite_automaton import (
     NondeterministicFiniteAutomaton,
@@ -6,6 +8,9 @@ from pyformlang.finite_automaton import (
 )
 
 from project import FABooleanMatricesCB, FABooleanMatricesDok
+
+if not sys.platform.startswith("linux"):
+    pytest.skip("skipping ubuntu-only tests", allow_module_level=True)
 
 
 @pytest.fixture(params=[FABooleanMatricesDok, FABooleanMatricesCB])
