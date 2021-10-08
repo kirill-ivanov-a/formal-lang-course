@@ -1,11 +1,12 @@
-from scipy import sparse
+from abc import ABC, abstractmethod
 from pyformlang.finite_automaton import State, NondeterministicFiniteAutomaton
+
 
 __all__ = ["FABooleanMatrices"]
 
 
-class FABooleanMatrices:
-    """Class representing boolean adjacency matrices
+class FABooleanMatrices(ABC):
+    """Base class representing boolean adjacency matrices
     for each finite automaton label
     """
 
@@ -19,7 +20,7 @@ class FABooleanMatrices:
     def to_automaton(self):
         automaton = NondeterministicFiniteAutomaton()
         for label, bool_matrix in self.bool_matrices.items():
-            for s_from, s_to in zip(*bool_matrix.nonzero()):
+            for s_from, s_to in self._get_nonzero(bool_matrix):
                 automaton.add_transition(s_from, label, s_to)
 
         for state in self.start_states:
@@ -39,28 +40,17 @@ class FABooleanMatrices:
     def get_final_states(self):
         return self.final_states.copy()
 
-    def get_transitive_closure(self):
-        tc = sum(self.bool_matrices.values())
-        prev_nnz = tc.nnz
-        new_nnz = 0
-
-        while prev_nnz != new_nnz:
-            tc += tc @ tc
-            prev_nnz, new_nnz = new_nnz, tc.nnz
-
-        return tc
-
     def intersect(self, other):
         """Returns a new class object containing
         the Kronecker products for given matrices
         """
-        bm_res = FABooleanMatrices()
+        bm_res = self.__class__()
         bm_res.num_states = self.num_states * other.num_states
         common_labels = self.bool_matrices.keys() & other.bool_matrices.keys()
 
         for label in common_labels:
-            bm_res.bool_matrices[label] = sparse.kron(
-                self.bool_matrices[label], other.bool_matrices[label], format="dok"
+            bm_res.bool_matrices[label] = self._kron(
+                self.bool_matrices[label], other.bool_matrices[label]
             )
 
         for s_fst, s_fst_idx in self.state_indices.items():
@@ -95,10 +85,30 @@ class FABooleanMatrices:
                 for s_to in states_to:
                     idx_from = self.state_indices[s_from]
                     idx_to = self.state_indices[s_to]
+                    label = str(label)
                     if label not in bool_matrices:
-                        bool_matrices[label] = sparse.dok_matrix(
-                            (self.num_states, self.num_states), dtype=bool
+                        bool_matrices[label] = self._create_bool_matrix(
+                            (self.num_states, self.num_states)
                         )
                     bool_matrices[label][idx_from, idx_to] = True
 
         return bool_matrices
+
+    @abstractmethod
+    def get_transitive_closure(self):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def _kron(bm1, bm2):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def _get_nonzero(bm):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def _create_bool_matrix(shape):
+        pass
