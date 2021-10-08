@@ -4,15 +4,15 @@ from itertools import product
 import pytest
 from pyformlang.regular_expression import PythonRegex
 
-from project import (
-    generate_two_cycles_graph,
-    rpq,
-    FABooleanMatricesDok,
-    FABooleanMatricesCB,
-)
-
 if not sys.platform.startswith("linux"):
     pytest.skip("skipping ubuntu-only tests", allow_module_level=True)
+else:
+    from project import (
+        generate_two_cycles_graph,
+        rpq,
+        FABooleanMatricesDok,
+        FABooleanMatricesCB,
+    )
 
 
 @pytest.fixture(params=[FABooleanMatricesDok, FABooleanMatricesCB])
