@@ -1,4 +1,3 @@
-from pyformlang.finite_automaton import NondeterministicFiniteAutomaton, State
 from scipy import sparse
 from project.fa_bool_matrices.fa_bool_matrices import FABooleanMatrices
 
