@@ -3,7 +3,7 @@ black
 cfpq-data
 networkx
 pre-commit
-pycubool
+pycubool; 'sys_platform' == 'linux'
 pydot
 pyformlang
 pytest
