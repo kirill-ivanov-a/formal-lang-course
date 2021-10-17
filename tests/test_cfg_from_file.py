@@ -4,7 +4,6 @@ from pyformlang.cfg import Production, Variable, Terminal
 from project import cfg_from_file
 
 
-
 @pytest.mark.parametrize(
     "text_cfg",
     ["""""", """A -> b"""],
