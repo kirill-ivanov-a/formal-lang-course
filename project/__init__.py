@@ -12,3 +12,6 @@ from project.fa_bool_matrices import *
 
 import project.rpq
 from project.rpq import *
+
+import project.cfg_utils
+from project.cfg_utils import *
