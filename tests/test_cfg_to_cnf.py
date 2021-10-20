@@ -35,7 +35,7 @@ def test_wcnf(cfg):
     assert is_wcnf(wcnf)
 
 
-def test_eps_generation(cfg):
+def test_eps_generating(cfg):
     wcnf = cfg_to_wcnf(cfg)
     if cfg.generate_epsilon():
         assert wcnf.generate_epsilon()
