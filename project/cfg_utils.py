@@ -5,7 +5,7 @@ __all__ = ["cfg_to_wcnf", "cfg_from_file"]
 
 
 def cfg_to_wcnf(cfg: CFG) -> CFG:
-    """Converts a CFG to the Chomsky Normal Form"""
+    """Converts a CFG to the Weak Chomsky Normal Form"""
     wcnf = cfg.to_normal_form()
     if cfg.generate_epsilon():
         productions = set(wcnf.productions)
