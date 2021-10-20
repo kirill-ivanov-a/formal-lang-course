@@ -49,24 +49,24 @@ def test_wcnf(cfg):
     [
         (
             """
-        S -> S S | epsilon
-        """,
+            S -> S S | epsilon
+            """,
             {"S"},
         ),
         (
             """
-        S -> S S | A
-        A -> B | epsilon
-        B -> epsilon
-        """,
+            S -> S S | A
+            A -> B | epsilon
+            B -> epsilon
+            """,
             {"S"},
         ),
         (
             """
-        S -> A a | S a
-        A -> epsilon
-        B -> epsilon
-        """,
+            S -> A a | S a
+            A -> epsilon
+            B -> epsilon
+            """,
             {"A"},
         ),
     ],
@@ -75,3 +75,54 @@ def test_eps_generating(cfg, exp_eps_gen_vars):
     wcnf = cfg_to_wcnf(CFG.from_text(cfg))
     act_eps_gen_vars = get_eps_generating_vars(wcnf)
     assert act_eps_gen_vars == exp_eps_gen_vars
+
+
+@pytest.mark.parametrize(
+    "cfg, contained_words",
+    [
+        (
+            """
+            S -> epsilon
+            A -> a | b | c | d
+            """,
+            {
+                True: [""],
+                False: ["a", "b", "c", "d"],
+            },
+        ),
+        (
+            """
+            S -> a S b S
+            S -> epsilon
+            """,
+            {
+                True: ["", "aaabbb", "abaabb", "ababab"],
+                False: ["abc", "aa", "bb", "ababa"],
+            },
+        ),
+        (
+            """
+            S -> i f ( C ) t h e n { ST } e l s e { ST }
+            C -> t r u e | f a l s e
+            ST -> p a s s | S
+            """,
+            {
+                True: [
+                    "if(true)then{pass}else{pass}",
+                    "if(false)then{if(true)then{pass}else{pass}}else{pass}",
+                    "if(false)then{pass}else{if(false)"
+                    "then{pass}else{if(true)then{pass}else{pass}}}",
+                ],
+                False: ["if(true)then{pass}else{pass", "", "if()then{}else{}"],
+            },
+        ),
+    ],
+)
+def test_generated_words(cfg, contained_words):
+    cfg = CFG.from_text(cfg)
+    wcnf = cfg_to_wcnf(cfg)
+    assert all(
+        wcnf.contains(w) and cfg.contains(w) for w in contained_words[True]
+    ) and all(
+        not wcnf.contains(w) and not cfg.contains(w) for w in contained_words[False]
+    )
