@@ -8,6 +8,10 @@ def is_wcnf(cfg: CFG) -> bool:
     return all(p.is_normal_form() if p.body else True for p in cfg.productions)
 
 
+def get_eps_generating_vars(cfg: CFG) -> set:
+    return {p.head.value for p in cfg.productions if not p.body}
+
+
 @pytest.fixture(
     params=[
         """
@@ -24,6 +28,11 @@ def is_wcnf(cfg: CFG) -> bool:
     S -> epsilon
     S -> a S b S
     """,
+        """
+        A -> epsilon
+        B -> epsilon
+        C -> epsilon
+    """,
     ]
 )
 def cfg(request):
@@ -35,9 +44,34 @@ def test_wcnf(cfg):
     assert is_wcnf(wcnf)
 
 
-def test_eps_generating(cfg):
-    wcnf = cfg_to_wcnf(cfg)
-    if cfg.generate_epsilon():
-        assert wcnf.generate_epsilon()
-    else:
-        assert not wcnf.generate_epsilon()
+@pytest.mark.parametrize(
+    "cfg, exp_eps_gen_vars",
+    [
+        (
+            """
+        S -> S S | epsilon
+        """,
+            {"S"},
+        ),
+        (
+            """
+        S -> S S | A
+        A -> B | epsilon
+        B -> epsilon
+        """,
+            {"S"},
+        ),
+        (
+            """
+        S -> A a | S a
+        A -> epsilon
+        B -> epsilon
+        """,
+            {"A"},
+        ),
+    ],
+)
+def test_eps_generating(cfg, exp_eps_gen_vars):
+    wcnf = cfg_to_wcnf(CFG.from_text(cfg))
+    act_eps_gen_vars = get_eps_generating_vars(wcnf)
+    assert act_eps_gen_vars == exp_eps_gen_vars
