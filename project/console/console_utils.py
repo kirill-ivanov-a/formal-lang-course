@@ -5,7 +5,7 @@ from itertools import chain
 
 import networkx as nx
 from cfpq_data import graph_from_dataset, DATASET
-from project import graph_utils
+from project.graphs import graph_utils
 
 graphs = list(chain.from_iterable(x.keys() for x in DATASET.values()))
 

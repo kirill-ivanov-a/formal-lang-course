@@ -9,7 +9,7 @@ from project import cfg_from_file
     ["""""", """A -> b"""],
 )
 def test_empty_cfg(tmpdir, text_cfg):
-    file = tmpdir.mkdir("test_dir").join("two_cycles.dot")
+    file = tmpdir.mkdir("test_dir").join("cfg")
     file.write(text_cfg)
     cfg = cfg_from_file(file)
 
@@ -38,7 +38,7 @@ def test_empty_cfg(tmpdir, text_cfg):
     ],
 )
 def test_productions(tmpdir, text_cfg, expected_productions):
-    file = tmpdir.mkdir("test_dir").join("two_cycles.dot")
+    file = tmpdir.mkdir("test_dir").join("cfg")
     file.write(text_cfg)
     cfg = cfg_from_file(file)
     actual_productions = cfg.productions
