@@ -4,7 +4,7 @@ from typing import AbstractSet, Iterable
 from pyformlang.cfg import Variable
 from pyformlang.regular_expression import Regex
 
-from project.grammars.ecfg_exeptions import InvalidECFGFormatException
+from project.grammars.ecfg_exceptions import InvalidECFGFormatException
 from project.grammars.ecfg_production import ECFGProduction
 
 __all__ = ["ECFG"]
