@@ -1,3 +1,4 @@
+"""Class representing a box of RSM"""
 from pyformlang.cfg import Variable
 from pyformlang.finite_automaton import DeterministicFiniteAutomaton
 

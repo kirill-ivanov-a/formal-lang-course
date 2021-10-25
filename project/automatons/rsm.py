@@ -1,3 +1,4 @@
+"""Class representing a Recursive State Machine"""
 from typing import Iterable
 
 from pyformlang.cfg import Variable

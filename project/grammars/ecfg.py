@@ -1,4 +1,4 @@
-"""Utilities for working with CFG"""
+"""Class representing an ECFG"""
 from typing import AbstractSet, Iterable
 
 from pyformlang.cfg import Variable

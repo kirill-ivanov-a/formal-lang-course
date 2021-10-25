@@ -1,4 +1,4 @@
-"""Utilities for working with CFG"""
+"""Class representing a production of an ECFG"""
 from pyformlang.cfg import Variable
 from pyformlang.regular_expression import Regex
 
