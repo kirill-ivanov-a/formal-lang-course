@@ -5,7 +5,7 @@ import os
 import cfpq_data
 import networkx as nx
 
-from project.graph_info import GraphInfo
+from project.graphs.graph_info import GraphInfo
 
 __all__ = ["get_graph_info", "generate_two_cycles_graph", "write_graph_to_dot"]
 

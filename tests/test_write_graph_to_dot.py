@@ -1,7 +1,6 @@
-import pytest
 import cfpq_data
 import networkx as nx
-from project.graph_utils import write_graph_to_dot
+from project import write_graph_to_dot
 
 
 def test_graph_isomorphism(tmpdir):
