@@ -12,3 +12,6 @@ from project.grammars import *
 
 import project.rpq
 from project.rpq import *
+
+import project.cyk
+from project.cyk import *
