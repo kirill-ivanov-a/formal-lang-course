@@ -1,11 +1,7 @@
 import pytest
 from pyformlang.cfg import CFG
 
-from project import cfg_to_wcnf
-
-
-def is_wcnf(cfg: CFG) -> bool:
-    return all(p.is_normal_form() if p.body else True for p in cfg.productions)
+from project import cfg_to_wcnf, is_wcnf
 
 
 def get_eps_generating_vars(cfg: CFG) -> set:
