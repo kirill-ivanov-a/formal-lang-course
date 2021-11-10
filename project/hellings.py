@@ -2,13 +2,13 @@ from typing import Set, Tuple
 import networkx as nx
 from pyformlang.cfg import CFG, Variable
 
-from project import cfg_to_wcnf, is_wcnf
+from project import cfg_to_wcnf
 
 __all__ = ["hellings", "cfpq"]
 
 
 def hellings(graph: nx.MultiDiGraph, cfg: CFG) -> Set[Tuple[int, str, int]]:
-    wcnf = cfg if is_wcnf(cfg) else cfg_to_wcnf(cfg)
+    wcnf = cfg_to_wcnf(cfg)
 
     eps_prod_heads = [p.head.value for p in wcnf.productions if not p.body]
     term_productions = {p for p in wcnf.productions if len(p.body) == 1}
@@ -35,9 +35,9 @@ def hellings(graph: nx.MultiDiGraph, cfg: CFG) -> Set[Tuple[int, str, int]]:
                     and p.body[1].value == N
                     and (u, p.head.value, m) not in r
                 }
-                new |= triplets
                 r_temp |= triplets
         r |= r_temp
+        new |= r_temp
         r_temp.clear()
 
         for u, M, v in r:
@@ -49,9 +49,9 @@ def hellings(graph: nx.MultiDiGraph, cfg: CFG) -> Set[Tuple[int, str, int]]:
                     and p.body[1].value == M
                     and (n, p.head.value, v) not in r
                 }
-                new |= triplets
                 r_temp |= triplets
         r |= r_temp
+        new |= r_temp
 
     return r
 
