@@ -14,7 +14,12 @@ __all__ = [
     "cfg_to_ecfg",
     "ecfg_to_rsm",
     "ecfg_from_file",
+    "is_wcnf",
 ]
+
+
+def is_wcnf(cfg: CFG) -> bool:
+    return all(p.is_normal_form() if p.body else True for p in cfg.productions)
 
 
 def cfg_to_wcnf(cfg: CFG) -> CFG:

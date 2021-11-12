@@ -15,3 +15,6 @@ from project.rpq import *
 
 import project.cyk
 from project.cyk import *
+
+import project.hellings
+from project.hellings import *
