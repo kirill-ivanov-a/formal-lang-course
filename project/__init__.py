@@ -18,3 +18,6 @@ from project.cyk import *
 
 import project.hellings
 from project.hellings import *
+
+import project.cfpq
+from project.cfpq import *

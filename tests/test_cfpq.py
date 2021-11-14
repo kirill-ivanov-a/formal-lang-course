@@ -3,10 +3,15 @@ from pyformlang.cfg import CFG
 from itertools import product
 from collections import namedtuple
 
-from project import generate_two_cycles_graph, cfpq
+from project import generate_two_cycles_graph, matrix_cfpq, hellings_cfpq
 from cfpq_data import labeled_cycle_graph
 
 Config = namedtuple("Config", ["start_var", "start_nodes", "final_nodes", "exp_ans"])
+
+
+@pytest.fixture(params=[matrix_cfpq, hellings_cfpq])
+def cfpq(request):
+    return request.param
 
 
 @pytest.mark.parametrize(
@@ -55,7 +60,7 @@ Config = namedtuple("Config", ["start_var", "start_nodes", "final_nodes", "exp_a
         ),
     ],
 )
-def test_cfpq_answer(cfg, graph, confs):
+def test_cfpq_answer(cfpq, cfg, graph, confs):
     assert all(
         cfpq(
             graph,

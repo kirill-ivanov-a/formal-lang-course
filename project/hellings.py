@@ -4,7 +4,7 @@ from pyformlang.cfg import CFG, Variable
 
 from project import cfg_to_wcnf
 
-__all__ = ["hellings", "cfpq"]
+__all__ = ["hellings"]
 
 
 def hellings(graph: nx.MultiDiGraph, cfg: CFG) -> Set[Tuple[int, str, int]]:
@@ -54,24 +54,3 @@ def hellings(graph: nx.MultiDiGraph, cfg: CFG) -> Set[Tuple[int, str, int]]:
         new |= r_temp
 
     return r
-
-
-def cfpq(
-    graph: nx.MultiDiGraph,
-    cfg: CFG,
-    start_nodes: Set[int] = None,
-    final_nodes: Set[int] = None,
-    start_var: Variable = Variable("S"),
-) -> Set[Tuple[int, int]]:
-    """Context-Free Path Querying based on Hellings Algorithm"""
-    cfg._start_symbol = start_var
-    wcnf = cfg_to_wcnf(cfg)
-    reach_pairs = {
-        (u, v) for u, h, v in hellings(graph, wcnf) if h == wcnf.start_symbol.value
-    }
-    if start_nodes:
-        reach_pairs = {(u, v) for u, v in reach_pairs if u in start_nodes}
-    if final_nodes:
-        reach_pairs = {(u, v) for u, v in reach_pairs if v in final_nodes}
-
-    return reach_pairs
