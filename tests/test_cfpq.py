@@ -9,7 +9,7 @@ from cfpq_data import labeled_cycle_graph
 Config = namedtuple("Config", ["start_var", "start_nodes", "final_nodes", "exp_ans"])
 
 
-@pytest.fixture(params=[matrix_cfpq, hellings_cfpq])
+@pytest.fixture(params=[hellings_cfpq, matrix_cfpq])
 def cfpq(request):
     return request.param
 
