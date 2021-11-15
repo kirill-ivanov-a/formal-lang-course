@@ -1,6 +1,6 @@
 antlr4-python3-runtime
 black
-cfpq-data==1.0.2
+cfpq-data==2.0.0
 networkx
 pre-commit
 pycubool; sys_platform == 'linux'
