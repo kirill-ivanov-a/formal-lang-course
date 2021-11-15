@@ -19,6 +19,24 @@ def cfpq(request):
     [
         (
             """
+                    S -> A B
+                    S -> A S1
+                    S1 -> S B
+                    A -> a
+                    B -> b
+                    """,
+            generate_two_cycles_graph(2, 1, ("a", "b")),
+            [
+                Config(
+                    "S", None, None, {(0, 0), (0, 3), (2, 0), (2, 3), (1, 0), (1, 3)}
+                ),
+                Config("S", {0}, {0}, {(0, 0)}),
+                Config("A", None, None, {(0, 1), (1, 2), (2, 0)}),
+                Config("B", None, None, {(3, 0), (0, 3)}),
+            ],
+        ),
+        (
+            """
                 A -> a A | epsilon
                 B -> b B | b
                 """,
@@ -38,24 +56,6 @@ def cfpq(request):
                 Config("S", {0, 1}, {0, 1}, {(0, 0), (1, 1)}),
                 Config("S", None, None, set((v, v) for v in range(4))),
                 Config("B", None, None, set()),
-            ],
-        ),
-        (
-            """
-                    S -> A B
-                    S -> A S1
-                    S1 -> S B
-                    A -> a
-                    B -> b
-                    """,
-            generate_two_cycles_graph(2, 1, ("a", "b")),
-            [
-                Config(
-                    "S", None, None, {(0, 0), (0, 3), (2, 0), (2, 3), (1, 0), (1, 3)}
-                ),
-                Config("A", None, None, {(0, 1), (1, 2), (2, 0)}),
-                Config("B", None, None, {(3, 0), (0, 3)}),
-                Config("S", {0}, {0}, {(0, 0)}),
             ],
         ),
     ],
