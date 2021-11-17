@@ -1,9 +1,8 @@
-from typing import Set, Tuple
+from typing import Set, Tuple, Callable
 import networkx as nx
 from pyformlang.cfg import CFG, Variable
-from scipy import sparse
 
-from project import hellings, cfg_to_wcnf
+from project import cf_graph_recognizer, cfg_to_wcnf
 
 __all__ = ["hellings_cfpq", "matrix_cfpq"]
 
@@ -16,17 +15,14 @@ def hellings_cfpq(
     start_var: Variable = Variable("S"),
 ) -> Set[Tuple[int, int]]:
     """Context-Free Path Querying based on Hellings Algorithm"""
-    cfg._start_symbol = start_var
-    wcnf = cfg_to_wcnf(cfg)
-    reach_pairs = {
-        (u, v) for u, h, v in hellings(graph, wcnf) if h == wcnf.start_symbol.value
-    }
-    if start_nodes:
-        reach_pairs = {(u, v) for u, v in reach_pairs if u in start_nodes}
-    if final_nodes:
-        reach_pairs = {(u, v) for u, v in reach_pairs if v in final_nodes}
-
-    return reach_pairs
+    return _cfpq(
+        graph,
+        cfg,
+        start_nodes,
+        final_nodes,
+        start_var,
+        recognizer=cf_graph_recognizer.hellings,
+    )
 
 
 def matrix_cfpq(
@@ -37,39 +33,30 @@ def matrix_cfpq(
     start_var: Variable = Variable("S"),
 ) -> Set[Tuple[int, int]]:
     """Context-Free Path Querying based on matrix multiplication"""
+    return _cfpq(
+        graph,
+        cfg,
+        start_nodes,
+        final_nodes,
+        start_var,
+        recognizer=cf_graph_recognizer.matrix_based,
+    )
+
+
+def _cfpq(
+    graph: nx.MultiDiGraph,
+    cfg: CFG,
+    start_nodes: Set[int] = None,
+    final_nodes: Set[int] = None,
+    start_var: Variable = Variable("S"),
+    recognizer: Callable = cf_graph_recognizer.hellings,
+) -> Set[Tuple[int, int]]:
+    """Basic CFPQ function"""
     cfg._start_symbol = start_var
     wcnf = cfg_to_wcnf(cfg)
-
-    eps_prod_heads = [p.head.value for p in wcnf.productions if not p.body]
-    term_productions = {p for p in wcnf.productions if len(p.body) == 1}
-    var_productions = {p for p in wcnf.productions if len(p.body) == 2}
-    nodes_num = graph.number_of_nodes()
-    matrices = {
-        v.value: sparse.dok_matrix((nodes_num, nodes_num), dtype=bool)
-        for v in wcnf.variables
+    reach_pairs = {
+        (u, v) for u, h, v in recognizer(graph, wcnf) if h == wcnf.start_symbol.value
     }
-
-    for i, j, data in graph.edges(data=True):
-        l = data["label"]
-        for v in {p.head.value for p in term_productions if p.body[0].value == l}:
-            matrices[v][i, j] = True
-
-    for i in range(nodes_num):
-        for v in eps_prod_heads:
-            matrices[v][i, i] = True
-
-    any_changing = True
-    while any_changing:
-        any_changing = False
-        for p in var_productions:
-            old_nnz = matrices[p.head.value].nnz
-            matrices[p.head.value] += (
-                matrices[p.body[0].value] @ matrices[p.body[1].value]
-            )
-            new_nnz = matrices[p.head.value].nnz
-            any_changing = old_nnz != new_nnz
-
-    reach_pairs = {(u, v) for u, v in zip(*matrices[wcnf.start_symbol.value].nonzero())}
     if start_nodes:
         reach_pairs = {(u, v) for u, v in reach_pairs if u in start_nodes}
     if final_nodes:
