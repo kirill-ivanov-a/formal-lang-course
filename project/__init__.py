@@ -16,5 +16,8 @@ from project.rpq import *
 import project.cyk
 from project.cyk import *
 
-import project.hellings
-from project.hellings import *
+import project.cf_graph_recognizer
+from project.cf_graph_recognizer import *
+
+import project.cfpq
+from project.cfpq import *

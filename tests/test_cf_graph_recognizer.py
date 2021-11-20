@@ -1,8 +1,13 @@
 import pytest
 from pyformlang.cfg import CFG
 
-from project import hellings, generate_two_cycles_graph
+from project import cf_graph_recognizer, generate_two_cycles_graph
 from cfpq_data import labeled_cycle_graph
+
+
+@pytest.fixture(params=[cf_graph_recognizer.hellings, cf_graph_recognizer.matrix_based])
+def graph_recognizer(request):
+    return request.param
 
 
 @pytest.mark.parametrize(
@@ -62,5 +67,5 @@ from cfpq_data import labeled_cycle_graph
         ),
     ],
 )
-def test_hellings_answer(cfg, graph, exp_ans):
-    assert hellings(graph, CFG.from_text(cfg)) == exp_ans
+def test_recognizer_answer(graph_recognizer, cfg, graph, exp_ans):
+    assert graph_recognizer(graph, CFG.from_text(cfg)) == exp_ans
