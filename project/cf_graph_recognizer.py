@@ -5,9 +5,15 @@ import networkx as nx
 from pyformlang.cfg import CFG
 from scipy import sparse
 
-from project import cfg_to_wcnf
+from project import (
+    cfg_to_wcnf,
+    ecfg_to_rsm,
+    cfg_to_ecfg,
+    FABooleanMatricesDok,
+    graph_to_nfa,
+)
 
-__all__ = ["hellings", "matrix_based"]
+__all__ = ["hellings", "matrix_based", "tensor_based"]
 
 
 def hellings(graph: nx.MultiDiGraph, cfg: CFG) -> Set[Tuple[int, str, int]]:
@@ -97,4 +103,52 @@ def matrix_based(graph: nx.MultiDiGraph, cfg: CFG) -> Set[Tuple[int, str, int]]:
         (u, variable, v)
         for variable, matrix in matrices.items()
         for u, v in zip(*matrix.nonzero())
+    }
+
+
+def tensor_based(graph: nx.MultiDiGraph, cfg: CFG) -> set[Tuple[int, str, int]]:
+    """Context-free recognizers for graph based on Kronecker product"""
+    graph_bm = FABooleanMatricesDok.from_automaton(graph_to_nfa(graph))
+    rsm = ecfg_to_rsm(cfg_to_ecfg(cfg))
+    rsm_vars = {box.variable.value for box in rsm.boxes}
+    rsm_bm = FABooleanMatricesDok.from_rsm(rsm)
+
+    for eps_state in rsm_bm.start_states & rsm_bm.final_states:
+        variable = rsm_bm.get_nonterminals(eps_state, eps_state)
+        if variable not in graph_bm.bool_matrices:
+            graph_bm.bool_matrices[variable] = sparse.dok_matrix(
+                (graph_bm.num_states, graph_bm.num_states), dtype=bool
+            )
+        for i in range(graph_bm.num_states):
+            graph_bm.bool_matrices[variable][i, i] = True
+
+    tc = graph_bm.intersect(rsm_bm).get_transitive_closure()
+
+    prev_nnz = tc.nnz
+    new_nnz = 0
+
+    while prev_nnz != new_nnz:
+        for i, j in zip(*tc.nonzero()):
+            rsm_from = i % rsm_bm.num_states
+            rsm_to = j % rsm_bm.num_states
+            variable = rsm_bm.get_nonterminals(rsm_from, rsm_to)
+            if not variable:
+                continue
+            graph_from = i // rsm_bm.num_states
+            graph_to = j // rsm_bm.num_states
+            if variable not in graph_bm.bool_matrices:
+                graph_bm.bool_matrices[variable] = sparse.dok_matrix(
+                    (graph_bm.num_states, graph_bm.num_states), dtype=bool
+                )
+            graph_bm.bool_matrices[variable][graph_from, graph_to] = True
+
+        tc = graph_bm.intersect(rsm_bm).get_transitive_closure()
+
+        prev_nnz, new_nnz = new_nnz, tc.nnz
+
+    return {
+        (u, label, v)
+        for label, bm in graph_bm.bool_matrices.items()
+        if label in rsm_vars
+        for u, v in zip(*bm.nonzero())
     }
