@@ -106,7 +106,7 @@ def matrix_based(graph: nx.MultiDiGraph, cfg: CFG) -> Set[Tuple[int, str, int]]:
     }
 
 
-def tensor_based(graph: nx.MultiDiGraph, cfg: CFG) -> set[Tuple[int, str, int]]:
+def tensor_based(graph: nx.MultiDiGraph, cfg: CFG) -> Set[Tuple[int, str, int]]:
     """Context-free recognizers for graph based on Kronecker product"""
     graph_bm = FABooleanMatricesDok.from_automaton(graph_to_nfa(graph))
     rsm = ecfg_to_rsm(cfg_to_ecfg(cfg))
