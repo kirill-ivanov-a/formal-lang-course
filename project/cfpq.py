@@ -4,7 +4,7 @@ from pyformlang.cfg import CFG, Variable
 
 from project import cf_graph_recognizer, cfg_to_wcnf
 
-__all__ = ["hellings_cfpq", "matrix_cfpq"]
+__all__ = ["hellings_cfpq", "matrix_cfpq", "tensor_cfpq"]
 
 
 def hellings_cfpq(
@@ -40,6 +40,24 @@ def matrix_cfpq(
         final_nodes,
         start_var,
         recognizer=cf_graph_recognizer.matrix_based,
+    )
+
+
+def tensor_cfpq(
+    graph: nx.MultiDiGraph,
+    cfg: CFG,
+    start_nodes: Set[int] = None,
+    final_nodes: Set[int] = None,
+    start_var: Variable = Variable("S"),
+) -> Set[Tuple[int, int]]:
+    """Context-Free Path Querying based on Kronecker product"""
+    return _cfpq(
+        graph,
+        cfg,
+        start_nodes,
+        final_nodes,
+        start_var,
+        recognizer=cf_graph_recognizer.tensor_based,
     )
 
 

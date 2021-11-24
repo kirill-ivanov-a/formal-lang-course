@@ -23,9 +23,9 @@ class Box:
         self._dfa = self._dfa.minimize()
 
     @property
-    def dfa(self):
+    def dfa(self) -> DeterministicFiniteAutomaton:
         return self._dfa
 
     @property
-    def variable(self):
+    def variable(self) -> Variable:
         return self._variable

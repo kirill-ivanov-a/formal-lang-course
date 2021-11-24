@@ -5,7 +5,13 @@ from project import cf_graph_recognizer, generate_two_cycles_graph
 from cfpq_data import labeled_cycle_graph
 
 
-@pytest.fixture(params=[cf_graph_recognizer.hellings, cf_graph_recognizer.matrix_based])
+@pytest.fixture(
+    params=[
+        cf_graph_recognizer.hellings,
+        cf_graph_recognizer.matrix_based,
+        cf_graph_recognizer.tensor_based,
+    ]
+)
 def graph_recognizer(request):
     return request.param
 

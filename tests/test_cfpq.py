@@ -3,13 +3,13 @@ from pyformlang.cfg import CFG
 from itertools import product
 from collections import namedtuple
 
-from project import generate_two_cycles_graph, matrix_cfpq, hellings_cfpq
+from project import generate_two_cycles_graph, matrix_cfpq, hellings_cfpq, tensor_cfpq
 from cfpq_data import labeled_cycle_graph
 
 Config = namedtuple("Config", ["start_var", "start_nodes", "final_nodes", "exp_ans"])
 
 
-@pytest.fixture(params=[hellings_cfpq, matrix_cfpq])
+@pytest.fixture(params=[hellings_cfpq, matrix_cfpq, tensor_cfpq])
 def cfpq(request):
     return request.param
 

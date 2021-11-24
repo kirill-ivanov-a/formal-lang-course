@@ -12,10 +12,12 @@ def test_graph_isomorphism(tmpdir):
         n, m, edge_labels=edge_labels, verbose=False
     )
     write_graph_to_dot(graph, file)
-
-    actual_graph = nx.drawing.nx_pydot.read_dot(file)
     expected_graph = cfpq_data.labeled_two_cycles_graph(
         n, m, edge_labels=edge_labels, verbose=False
     )
+    expected_graph_string = nx.drawing.nx_pydot.to_pydot(expected_graph).to_string()
 
-    assert nx.is_isomorphic(actual_graph, expected_graph)
+    with open(file, "r") as f:
+        actual_graph_string = f.read()
+
+    assert actual_graph_string == expected_graph_string
