@@ -1,9 +1,19 @@
+import sys
+
 import pytest
 from functools import partial
 from pyformlang.cfg import CFG
-
-from project import cf_graph_recognizer, generate_two_cycles_graph, FABooleanMatricesCB
 from cfpq_data import labeled_cycle_graph
+
+
+if not sys.platform.startswith("linux"):
+    pytest.skip("skipping ubuntu-only tests", allow_module_level=True)
+else:
+    from project import (
+        cf_graph_recognizer,
+        generate_two_cycles_graph,
+        FABooleanMatricesCB,
+    )
 
 
 @pytest.fixture(
