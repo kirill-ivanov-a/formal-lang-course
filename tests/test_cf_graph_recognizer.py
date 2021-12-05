@@ -36,14 +36,14 @@ def graph_recognizer(request):
             """
             S -> epsilon
             """,
-            labeled_cycle_graph(3, "a", verbose=False),
+            labeled_cycle_graph(3, "a"),
             {(1, "S", 1), (2, "S", 2), (0, "S", 0)},
         ),
         (
             """
                 S -> b | epsilon
                 """,
-            labeled_cycle_graph(4, "b", verbose=False),
+            labeled_cycle_graph(4, "b"),
             {
                 (1, "S", 1),
                 (2, "S", 2),

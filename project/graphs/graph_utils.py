@@ -27,7 +27,7 @@ def get_graph_info(graph: nx.MultiDiGraph) -> GraphInfo:
     return GraphInfo(
         graph.number_of_nodes(),
         graph.number_of_edges(),
-        cfpq_data.get_labels(graph, verbose=False),
+        {l for _, _, l in graph.edges(data="label")},
     )
 
 
@@ -57,8 +57,7 @@ def generate_two_cycles_graph(
     return cfpq_data.labeled_two_cycles_graph(
         first_cycle_nodes_num,
         second_cycle_nodes_num,
-        edge_labels=edge_labels,
-        verbose=False,
+        labels=edge_labels,
     )
 
 

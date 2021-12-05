@@ -8,13 +8,9 @@ def test_graph_isomorphism(tmpdir):
     edge_labels = ("a", "b")
     file = tmpdir.mkdir("test_dir").join("two_cycles.dot")
 
-    graph = cfpq_data.labeled_two_cycles_graph(
-        n, m, edge_labels=edge_labels, verbose=False
-    )
+    graph = cfpq_data.labeled_two_cycles_graph(n, m, labels=edge_labels)
     write_graph_to_dot(graph, file)
-    expected_graph = cfpq_data.labeled_two_cycles_graph(
-        n, m, edge_labels=edge_labels, verbose=False
-    )
+    expected_graph = cfpq_data.labeled_two_cycles_graph(n, m, labels=edge_labels)
     expected_graph_string = nx.drawing.nx_pydot.to_pydot(expected_graph).to_string()
 
     with open(file, "r") as f:

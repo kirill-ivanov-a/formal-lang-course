@@ -60,7 +60,7 @@ def cfpq(request):
                     A -> a A | epsilon
                     B -> b B | b
                     """,
-            labeled_cycle_graph(3, "a", verbose=False),
+            labeled_cycle_graph(3, "a"),
             [
                 Config("A", {0}, {0}, {(0, 0)}),
                 Config("A", None, None, set(product(range(3), range(3)))),
@@ -71,7 +71,7 @@ def cfpq(request):
             """
                     S -> epsilon
                     """,
-            labeled_cycle_graph(4, "b", verbose=False),
+            labeled_cycle_graph(4, "b"),
             [
                 Config("S", {0, 1}, {0, 1}, {(0, 0), (1, 1)}),
                 Config("S", None, None, set((v, v) for v in range(4))),
