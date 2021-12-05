@@ -1,7 +1,8 @@
 import pytest
+from functools import partial
 from pyformlang.cfg import CFG
 
-from project import cf_graph_recognizer, generate_two_cycles_graph
+from project import cf_graph_recognizer, generate_two_cycles_graph, FABooleanMatricesCB
 from cfpq_data import labeled_cycle_graph
 
 
@@ -10,6 +11,8 @@ from cfpq_data import labeled_cycle_graph
         cf_graph_recognizer.hellings,
         cf_graph_recognizer.matrix_based,
         cf_graph_recognizer.tensor_based,
+        partial(cf_graph_recognizer.matrix_based, fabm=FABooleanMatricesCB),
+        partial(cf_graph_recognizer.tensor_based, fabm=FABooleanMatricesCB),
     ]
 )
 def graph_recognizer(request):

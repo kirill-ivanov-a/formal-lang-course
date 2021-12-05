@@ -25,7 +25,7 @@ def rpq(
     tc = intersected_bm.get_transitive_closure()
     res = set()
 
-    for s_from, s_to in fabm._get_nonzero(tc):
+    for s_from, s_to in fabm.get_nonzero(tc):
         if s_from in start_states and s_to in final_states:
             res.add((s_from // query_bm.num_states, s_to // query_bm.num_states))
 

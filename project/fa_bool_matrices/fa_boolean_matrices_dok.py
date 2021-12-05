@@ -15,7 +15,7 @@ class FABooleanMatricesDok(FABooleanMatrices):
         if self.bool_matrices.values():
             tc = sum(self.bool_matrices.values())
         else:
-            return self._create_bool_matrix((self.num_states, self.num_states))
+            return self.create_bool_matrix((self.num_states, self.num_states))
 
         prev_nnz = tc.nnz
         new_nnz = 0
@@ -27,13 +27,21 @@ class FABooleanMatricesDok(FABooleanMatrices):
         return tc
 
     @staticmethod
-    def _kron(bm1, bm2):
+    def kron(bm1, bm2):
         return sparse.kron(bm1, bm2, format="dok")
 
     @staticmethod
-    def _create_bool_matrix(shape):
+    def create_bool_matrix(shape):
         return sparse.dok_matrix(shape, dtype=bool)
 
     @staticmethod
-    def _get_nonzero(bm):
+    def get_nonzero(bm):
         return zip(*bm.nonzero())
+
+    @staticmethod
+    def get_nnz(bm):
+        return bm.nnz
+
+    @staticmethod
+    def mxm(bm1, bm2, bm_out):
+        bm_out[:, :] = bm_out + bm1 @ bm2

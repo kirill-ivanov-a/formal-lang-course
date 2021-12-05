@@ -26,13 +26,21 @@ class FABooleanMatricesCB(FABooleanMatrices):
         return tc
 
     @staticmethod
-    def _kron(bm1, bm2):
+    def kron(bm1, bm2):
         return bm1.kronecker(bm2)
 
     @staticmethod
-    def _create_bool_matrix(shape):
+    def create_bool_matrix(shape):
         return cb.Matrix.empty(shape)
 
     @staticmethod
-    def _get_nonzero(bm):
+    def get_nonzero(bm):
         return zip(*bm.to_lists())
+
+    @staticmethod
+    def get_nnz(bm):
+        return bm.nvals
+
+    @staticmethod
+    def mxm(bm1, bm2, bm_out):
+        bm1.mxm(bm2, out=bm_out, accumulate=True)

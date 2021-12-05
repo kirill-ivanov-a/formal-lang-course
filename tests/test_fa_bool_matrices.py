@@ -46,7 +46,7 @@ def test_labels(fa, fabm):
 @pytest.mark.parametrize("label,expected_nnz", [("a", 2), ("b", 1), ("c", 1), ("d", 2)])
 def test_nonzero(fa, fabm, label, expected_nnz):
     bm = fabm.from_automaton(fa)
-    actual_nnz = len(list(fabm._get_nonzero(bm.bool_matrices[label])))
+    actual_nnz = len(list(fabm.get_nonzero(bm.bool_matrices[label])))
 
     assert actual_nnz == expected_nnz
 
@@ -62,13 +62,13 @@ def test_nonzero(fa, fabm, label, expected_nnz):
 )
 def test_adjacency(fa, fabm, label, edges):
     bm = fabm.from_automaton(fa)
-    assert set(fabm._get_nonzero(bm.bool_matrices[label])) == set(edges)
+    assert set(fabm.get_nonzero(bm.bool_matrices[label])) == set(edges)
 
 
 def test_transitive_closure(fa, fabm):
     bm = fabm.from_automaton(fa)
     tc = bm.get_transitive_closure()
-    assert sum(1 for _ in fabm._get_nonzero(tc)) == tc.shape[0] * tc.shape[1]
+    assert sum(1 for _ in fabm.get_nonzero(tc)) == tc.shape[0] * tc.shape[1]
 
 
 def test_intersection(fabm):

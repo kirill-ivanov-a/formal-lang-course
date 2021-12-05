@@ -23,7 +23,7 @@ class FABooleanMatrices(ABC):
     def to_automaton(self):
         automaton = NondeterministicFiniteAutomaton()
         for label, bool_matrix in self.bool_matrices.items():
-            for s_from, s_to in self._get_nonzero(bool_matrix):
+            for s_from, s_to in self.get_nonzero(bool_matrix):
                 automaton.add_transition(s_from, label, s_to)
 
         for state in self.start_states:
@@ -52,7 +52,7 @@ class FABooleanMatrices(ABC):
         common_labels = self.bool_matrices.keys() & other.bool_matrices.keys()
 
         for label in common_labels:
-            bm_res.bool_matrices[label] = self._kron(
+            bm_res.bool_matrices[label] = self.kron(
                 self.bool_matrices[label], other.bool_matrices[label]
             )
 
@@ -131,7 +131,7 @@ class FABooleanMatrices(ABC):
                         self.bool_matrices[label][idx_from, idx_to] = True
                         continue
                     if label not in bool_matrices:
-                        bool_matrices[label] = self._create_bool_matrix(
+                        bool_matrices[label] = self.create_bool_matrix(
                             (self.num_states, self.num_states)
                         )
                     bool_matrices[label][idx_from, idx_to] = True
@@ -149,7 +149,7 @@ class FABooleanMatrices(ABC):
                     idx_to = self.state_indices[s_to]
                     label = str(label)
                     if label not in bool_matrices:
-                        bool_matrices[label] = self._create_bool_matrix(
+                        bool_matrices[label] = self.create_bool_matrix(
                             (self.num_states, self.num_states)
                         )
                     bool_matrices[label][idx_from, idx_to] = True
@@ -162,15 +162,25 @@ class FABooleanMatrices(ABC):
 
     @staticmethod
     @abstractmethod
-    def _kron(bm1, bm2):
+    def kron(bm1, bm2):
         pass
 
     @staticmethod
     @abstractmethod
-    def _get_nonzero(bm):
+    def get_nonzero(bm):
         pass
 
     @staticmethod
     @abstractmethod
-    def _create_bool_matrix(shape):
+    def create_bool_matrix(shape):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_nnz(bm):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def mxm(bm1, bm2, bm_out):
         pass

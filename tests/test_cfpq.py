@@ -1,15 +1,35 @@
+import sys
+
 import pytest
 from pyformlang.cfg import CFG
 from itertools import product
 from collections import namedtuple
-
-from project import generate_two_cycles_graph, matrix_cfpq, hellings_cfpq, tensor_cfpq
+from functools import partial
 from cfpq_data import labeled_cycle_graph
+
+if not sys.platform.startswith("linux"):
+    pytest.skip("skipping ubuntu-only tests", allow_module_level=True)
+else:
+    from project import (
+        generate_two_cycles_graph,
+        matrix_cfpq,
+        hellings_cfpq,
+        tensor_cfpq,
+        FABooleanMatricesCB,
+    )
 
 Config = namedtuple("Config", ["start_var", "start_nodes", "final_nodes", "exp_ans"])
 
 
-@pytest.fixture(params=[hellings_cfpq, matrix_cfpq, tensor_cfpq])
+@pytest.fixture(
+    params=[
+        hellings_cfpq,
+        matrix_cfpq,
+        tensor_cfpq,
+        partial(matrix_cfpq, fabm=FABooleanMatricesCB),
+        partial(tensor_cfpq, fabm=FABooleanMatricesCB),
+    ]
+)
 def cfpq(request):
     return request.param
 
@@ -19,12 +39,12 @@ def cfpq(request):
     [
         (
             """
-                    S -> A B
-                    S -> A S1
-                    S1 -> S B
-                    A -> a
-                    B -> b
-                    """,
+                        S -> A B
+                        S -> A S1
+                        S1 -> S B
+                        A -> a
+                        B -> b
+                        """,
             generate_two_cycles_graph(2, 1, ("a", "b")),
             [
                 Config(
@@ -37,9 +57,9 @@ def cfpq(request):
         ),
         (
             """
-                A -> a A | epsilon
-                B -> b B | b
-                """,
+                    A -> a A | epsilon
+                    B -> b B | b
+                    """,
             labeled_cycle_graph(3, "a", verbose=False),
             [
                 Config("A", {0}, {0}, {(0, 0)}),
@@ -49,8 +69,8 @@ def cfpq(request):
         ),
         (
             """
-                S -> epsilon
-                """,
+                    S -> epsilon
+                    """,
             labeled_cycle_graph(4, "b", verbose=False),
             [
                 Config("S", {0, 1}, {0, 1}, {(0, 0), (1, 1)}),
