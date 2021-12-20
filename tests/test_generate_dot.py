@@ -8,6 +8,8 @@ if sys.platform.startswith("win"):
 else:
     from project.parsing_utils import generate_dot
 
+from antlr4.error.Errors import ParseCancellationException
+
 
 def test_write_dot(tmpdir):
     text = """g = load graph "hello";
