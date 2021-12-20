@@ -57,8 +57,8 @@ expr -> LP expr RP
       | expr DOT expr
       | expr OR expr
       | expr KLEENE
-      
-      
+
+
 graph -> load_graph
        | cfg
        | string
@@ -150,42 +150,42 @@ GRAPH -> 'graph'
 VERTICES -> 'vertices'
 LABELS -> 'labels'
 SELECT -> 'select'
-EDGES -> 'edges' 
-REACHABLE -> 'reachable' 
-START -> 'start' 
-FINAL -> 'final' 
-FROM -> 'from' 
-FILTER -> 'filter' 
-MAP -> 'map' 
-PRINT -> 'print' 
+EDGES -> 'edges'
+REACHABLE -> 'reachable'
+START -> 'start'
+FINAL -> 'final'
+FROM -> 'from'
+FILTER -> 'filter'
+MAP -> 'map'
+PRINT -> 'print'
 BOOL -> TRUE | FALSE
-TRUE -> 'true' 
-FALSE -> 'false' 
+TRUE -> 'true'
+FALSE -> 'false'
 
 
-ASSIGN -> '=' 
-AND -> '&' 
-OR -> '|' 
-NOT -> 'not' 
-IN -> 'in' 
-KLEENE -> '*' 
-DOT -> '.' 
-COMMA -> ',' 
-SEMI -> ';' 
-LCB -> '{' 
-RCB -> '}' 
-LP -> '(' 
-RP -> ')' 
-QUOT -> '"' 
-TRIPLE_QUOT -> '"""' 
-COLON -> ':' 
+ASSIGN -> '='
+AND -> '&'
+OR -> '|'
+NOT -> 'not'
+IN -> 'in'
+KLEENE -> '*'
+DOT -> '.'
+COMMA -> ','
+SEMI -> ';'
+LCB -> '{'
+RCB -> '}'
+LP -> '('
+RP -> ')'
+QUOT -> '"'
+TRIPLE_QUOT -> '"""'
+COLON -> ':'
 ARROW -> '->'
 
-VAR -> ('_' | CHAR) ID_CHAR* 
+VAR -> ('_' | CHAR) ID_CHAR*
 
-INT -> NONZERO_DIGIT DIGIT* | '0' 
+INT -> NONZERO_DIGIT DIGIT* | '0'
 CFG -> TRIPLE_QUOT (CHAR | DIGIT | ' ' | '\n' | ARROW)* TRIPLE_QUOT
-STRING -> QUOT (CHAR | DIGIT | '_' | ' ')* QUOT 
+STRING -> QUOT (CHAR | DIGIT | '_' | ' ')* QUOT
 ID_CHAR -> (CHAR | DIGIT | '_')
 CHAR -> [a-z] | [A-Z]
 NONZERO_DIGIT -> [1-9]
