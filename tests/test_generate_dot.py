@@ -1,8 +1,12 @@
+import sys
+
 import pytest
 import os
 
-from project.parsing_utils import generate_dot
-from antlr4.error.Errors import ParseCancellationException
+if sys.platform.startswith("win"):
+    pytest.skip("skipping", allow_module_level=True)
+else:
+    from project.parsing_utils import generate_dot
 
 
 def test_write_dot(tmpdir):
