@@ -1,0 +1,13 @@
+g = load graph "hello";
+g = set start of (set final of g to (select vertices from g)) to {1..100};
+l1 = "l1" | "l2";
+q1 = ("type" | l1)*;
+q2 = "subclass_of" . q;
+res1 = g & q1;
+res2 = g & q2;
+s = select start vertices from g;
+vertices1 = filter (fun v: v in s) (map (fun ((u_g,u_q1),l,(v_g,v_q1)): u_g) (select edges from res1));
+vertices2 = filter (fun v: v in s) (map (fun ((u_g,u_q2),l,(v_g,v_q1)): u_g) (select edges from res2));
+vertices3 = vertices1 & vertices2;
+
+print vertices3;
