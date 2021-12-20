@@ -3,7 +3,7 @@ import sys
 import pytest
 
 
-if not sys.platform.startswith("windows"):
+if sys.platform.startswith("win"):
     pytest.skip("skipping", allow_module_level=True)
 else:
     from project.parsing_utils import parse
