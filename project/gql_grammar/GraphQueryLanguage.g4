@@ -30,7 +30,7 @@ graph : load_graph
       | LP graph RP
       ;
 
-load_graph : LOAD GRAPH path;
+load_graph : LOAD GRAPH (path | string);
 set_start : SET START OF (graph | var) TO (vertices | var) ;
 set_final : SET FINAL OF (graph | var) TO (vertices | var) ;
 add_start : ADD START OF (graph | var) TO (vertices | var) ;
@@ -78,7 +78,7 @@ vertices_range : LCB INT DOT DOT INT RCB ;
 
 cfg : CFG ;
 string : STRING ;
-path : STRING ;
+path : PATH ;
 
 vertices_set : LCB (INT COMMA)* (INT)? RCB
              | vertices_range ;
@@ -107,6 +107,7 @@ val : boolean
 
 
 boolean : BOOL;
+
 
 FUN : WS? 'fun' WS?;
 LOAD : WS? 'load' WS? ;
@@ -154,25 +155,12 @@ ARROW : '->' ;
 VAR : ('_' | CHAR) ID_CHAR* ;
 
 INT : NONZERO_DIGIT DIGIT* | '0' ;
-CFG : TRIPLE_QUOT (CHAR | DIGIT | ' ' | '\n' | ARROW)* TRIPLE_QUOT;
+CFG : TRIPLE_QUOT (CHAR | DIGIT | ' ' | '\n' | ARROW)* TRIPLE_QUOT ;
 STRING : QUOT (CHAR | DIGIT | '_' | ' ')* QUOT ;
+PATH : QUOT (CHAR | DIGIT | '_' | ' ' | '/' | DOT)* QUOT ;
 ID_CHAR : (CHAR | DIGIT | '_');
 CHAR : [a-z] | [A-Z];
 NONZERO_DIGIT : [1-9];
 DIGIT : [0-9];
 WS : [ \t\r]+ -> skip;
 EOL : [\n]+;
-
-//g' = load graph "hello";
-//g = set start of (set final of g' to (select vertices from g')) to {1..100};
-//l1 = "l1" | "l2";
-//q1 = ("type" | l1)*;
-//q2 = "subclass_of" . q;
-//res1 = g & q1;
-//res2 = g & q2;
-//s = select start vertices from g;
-//vertices1 = filter (fun v -> v in s) (map (fun ((u_g,u_q1),l,(v_g,v_q1)) -> u_g) (select edges from res1));
-//vertices2 = filter (fun v -> v in s) (map (fun ((u_g,u_q2),l,(v_g,v_q1)) -> u_g) (select edges from res2));
-//vertices = vertices1 & vertices2;
-//
-//print vertices;
