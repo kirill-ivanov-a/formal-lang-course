@@ -11,7 +11,7 @@ digraph tree {
 5 -> 6;
 6 [label=val];
 6 -> 7;
-7 [label=graph];
+7 [label=grph];
 7 -> 8;
 8 [label=load_graph];
 8 -> 9;
@@ -37,7 +37,7 @@ digraph tree {
 18 -> 19;
 19 [label=val];
 19 -> 20;
-20 [label=graph];
+20 [label=grph];
 20 -> 21;
 21 [label=set_start];
 21 -> 22;
@@ -47,11 +47,11 @@ digraph tree {
 21 -> 24;
 24 [label="TERM: of "];
 21 -> 25;
-25 [label=graph];
+25 [label=grph];
 25 -> 26;
 26 [label="TERM: ("];
 25 -> 27;
-27 [label=graph];
+27 [label=grph];
 27 -> 28;
 28 [label=set_final];
 28 -> 29;
@@ -123,7 +123,7 @@ digraph tree {
 61 -> 62;
 62 [label=val];
 62 -> 63;
-63 [label=graph];
+63 [label=grph];
 63 -> 64;
 64 [label=string];
 64 -> 65;
@@ -135,7 +135,7 @@ digraph tree {
 67 -> 68;
 68 [label=val];
 68 -> 69;
-69 [label=graph];
+69 [label=grph];
 69 -> 70;
 70 [label=string];
 70 -> 71;
@@ -163,7 +163,7 @@ digraph tree {
 81 -> 82;
 82 [label=val];
 82 -> 83;
-83 [label=graph];
+83 [label=grph];
 83 -> 84;
 84 [label=string];
 84 -> 85;
@@ -197,7 +197,7 @@ digraph tree {
 98 -> 99;
 99 [label=val];
 99 -> 100;
-100 [label=graph];
+100 [label=grph];
 100 -> 101;
 101 [label=string];
 101 -> 102;
