@@ -20,21 +20,21 @@ expr : LP expr RP
      | expr KLEENE
      ;
 
-graph : load_graph
+grph : load_graph
       | cfg
       | string
       | set_start
       | set_final
       | add_start
       | add_final
-      | LP graph RP
+      | LP grph RP
       ;
 
 load_graph : LOAD GRAPH (path | string);
-set_start : SET START OF (graph | var) TO (vertices | var) ;
-set_final : SET FINAL OF (graph | var) TO (vertices | var) ;
-add_start : ADD START OF (graph | var) TO (vertices | var) ;
-add_final : ADD FINAL OF (graph | var) TO (vertices | var) ;
+set_start : SET START OF (grph | var) TO (vertices | var) ;
+set_final : SET FINAL OF (grph | var) TO (vertices | var) ;
+add_start : ADD START OF (grph | var) TO (vertices | var) ;
+add_final : ADD FINAL OF (grph | var) TO (vertices | var) ;
 
 vertices : vertex
        | vertices_range
@@ -68,12 +68,12 @@ anfunc : FUN variables COLON expr
 mapping : MAP anfunc expr;
 filtering : FILTER anfunc expr;
 
-select_edges : SELECT EDGES FROM (graph | var) ;
-select_labels : SELECT LABELS FROM (graph | var) ;
-select_reachable : SELECT REACHABLE VERTICES FROM (graph | var) ;
-select_final : SELECT FINAL VERTICES FROM (graph | var) ;
-select_start : SELECT START VERTICES FROM (graph | var) ;
-select_vertices : SELECT VERTICES FROM (graph | var) ;
+select_edges : SELECT EDGES FROM (grph | var) ;
+select_labels : SELECT LABELS FROM (grph | var) ;
+select_reachable : SELECT REACHABLE VERTICES FROM (grph | var) ;
+select_final : SELECT FINAL VERTICES FROM (grph | var) ;
+select_start : SELECT START VERTICES FROM (grph | var) ;
+select_vertices : SELECT VERTICES FROM (grph | var) ;
 vertices_range : LCB INT DOT DOT INT RCB ;
 
 cfg : CFG ;
@@ -98,7 +98,7 @@ variables : (var COMMA)* var?
      ;
 
 val : boolean
-    | graph
+    | grph
     | edges
     | labels
     | vertices

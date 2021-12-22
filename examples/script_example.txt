@@ -1,0 +1,4 @@
+g = load graph "skos";
+common_labels = (select labels from g) & (select labels from (load graph "graph.txt"));
+
+print common_labels;
